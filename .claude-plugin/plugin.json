@@ -1,0 +1,10 @@
+{
+  "name": "dawood-skills",
+  "version": "0.1.0",
+  "description": "Dawood's personal collection of Claude Code skills.",
+  "author": { "name": "EngDawood", "url": "https://github.com/EngDawood" },
+  "homepage": "https://github.com/EngDawood/skills",
+  "repository": "https://github.com/EngDawood/skills",
+  "license": "MIT",
+  "keywords": ["skills", "x", "twitter", "fxembed"]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "dawood-skills",
+  "owner": { "name": "EngDawood", "url": "https://github.com/EngDawood" },
+  "metadata": { "description": "Dawood's Claude Code skills" },
+  "plugins": [
+    {
+      "name": "dawood-skills",
+      "source": "./",
+      "description": "Dawood's personal collection of Claude Code skills (currently: x-fxembed, read X/Twitter data via the FxEmbed API).",
+      "version": "0.1.0",
+      "category": "productivity",
+      "keywords": ["skills", "x", "twitter", "fxembed"]
+    }
+  ]
+}
