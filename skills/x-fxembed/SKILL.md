@@ -17,7 +17,7 @@ FxEmbed (github.com/FxEmbed/FxEmbed, docs.fxembed.com) exposes X data as public 
 Run the helper (Python 3 stdlib, handles URL parsing and retries):
 
 ```bash
-S=scripts/fx.py   # path relative to this skill
+S=skills/x-fxembed/scripts/fx.py   # adjust to where this skill is installed
 python3 -I $S status https://x.com/jack/status/20      # one post
 python3 -I $S thread 20                                # post plus its thread
 python3 -I $S conversation 20 --ranking recency        # thread plus replies
@@ -70,11 +70,23 @@ Embeds only render for bot User-Agents (Discordbot, TelegramBot). In a browser t
 
 ## RSS / Atom for an account
 
-`https://fxtwitter.com/{handle}/feed.xml` (RSS) or `feed.atom.xml`. Media-only: `media.xml` / `media.atom.xml`. Query: `count` (1 to 100, default 90), `with_replies`, `safe`, `lang`.
+Tested live 2026-10-11: X feeds returned valid RSS 2.0 (`application/rss+xml`) and Atom (`application/atom+xml`), and also worked on the `fixupx.com` host.
 
-## Bluesky
+| Feed | X / Twitter | Bluesky |
+|---|---|---|
+| Recent posts, RSS | `https://fxtwitter.com/{handle}/feed.xml` | `https://fxbsky.app/profile/{handle}/feed.xml` |
+| Recent posts, Atom | `.../feed.atom.xml` | `.../feed.atom.xml` |
+| Media-only, RSS / Atom | `.../media.xml` / `.../media.atom.xml` | same, under `/profile/{handle}/` |
 
-Same project, sibling API: `https://api.fxbsky.app/2/...` and links via `fxbsky.app` (prefix `fx` to `bsky.app`). Spec: `https://api.fxbsky.app/2/openapi.json`. Not covered by the helper.
+Query params, all optional: `count` (1 to 100, default 90), `with_replies` or `withReplies`, `safe` (hide sensitive posts), `lang` or `language` (translation, documented as unreliable). Bluesky media feeds exclude replies by default.
+
+What readers get: RSS has a `guid` per post (permalink), HTML `description`, and Media RSS thumbnails for videos. Atom has HTML `content`. The avatar is the channel image. The enclosure is the first photo, GIF, or progressive MP4 (not HLS); a link-card image is the fallback.
+
+Gotchas seen in testing:
+- **Transient 404s with an empty body** hit X feeds too (`media.atom.xml`, `feed.xml?safe=1` each failed once, then returned 200). Retry 2 to 3 times before concluding a feed does not exist.
+- **`feed.atom.xml?lang=es` returned 404** on its one try, which fits the docs calling `lang` unreliable. Retry without `lang`.
+- **Bluesky handle `bsky.app` returned a different account's feed** (channel title "Nick Sousanis (@nsousanis.bsky.social)"). Always check the channel `<title>` matches the handle you asked for, and prefer a full handle such as `user.bsky.social`.
+- Feeds are XML, so the `fx.py` helper does not cover them. Use `curl` and parse the XML.
 
 ## When it does not fit
 

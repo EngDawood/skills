@@ -52,3 +52,11 @@ A post that cannot be shown can come back as `APIStatusTombstone` (`type, provid
 - `/2/profile/{handle}` and `/2/profile/{handle}/about` returned an occasional false 404.
 - `/2/search` returned 404 with empty results most of the time. Do not treat as proof of no matches.
 - `/2/trends` returned 200 but sometimes an empty `trends` list.
+
+## Search `feed` param (tested 2026-10-11)
+
+Accepted values: `latest`, `top`, `media`. Any other value returns `400 feed: Invalid option: expected one of "latest"|"top"|"media"`. In testing, `latest` returned results on 1 of 2 tries, and `top` and `media` returned the empty 404 on every try, so the param is valid but search is unreliable.
+
+## RSS / Atom feeds (tested 2026-10-11)
+
+See `SKILL.md`. 200 for `feed.xml`, `feed.atom.xml`, `media.xml`, `media.atom.xml` on X and `feed.xml`, `feed.atom.xml` on Bluesky, after retrying transient 404s. Not tested: Bluesky `media*.xml`, `withReplies`/`language` aliases, enclosure contents.
